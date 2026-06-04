@@ -2,10 +2,13 @@
   "name": "@fount/shared",
   "version": "0.1.0",
   "private": true,
-  "main": "./src/index.ts",
+  "main": "./dist/index.js",
   "exports": {
-    "./types": "./src/types/index.ts",
-    "./constants": "./src/constants/index.ts"
+    "./types": "./dist/types/index.js",
+    "./constants": "./dist/constants/index.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
   },
   "devDependencies": {
     "typescript": "^5.4.0"

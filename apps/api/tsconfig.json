@@ -13,7 +13,8 @@
     "declaration": true,
     "sourceMap": true,
     "paths": {
-      "@fount/shared/*": ["../../packages/shared/src/*"]
+      "@fount/shared/types": ["../../packages/shared/src/types/index.ts"],
+      "@fount/shared/constants": ["../../packages/shared/src/constants/index.ts"]
     }
   },
   "include": [

@@ -5,7 +5,8 @@
   "scripts": {
     "dev:api": "yarn workspace @fount/api dev",
     "dev:web": "yarn workspace @fount/web dev",
-    "build:api": "yarn workspace @fount/api build",
+    "build:shared": "yarn workspace @fount/shared build",
+    "build:api": "yarn workspace @fount/shared build && yarn workspace @fount/api build",
     "build:web": "yarn workspace @fount/web build",
     "lint": "eslint . --ext .ts,.tsx",
     "typecheck": "tsc --noEmit"
