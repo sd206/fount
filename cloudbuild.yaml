@@ -29,6 +29,9 @@ steps:
       - --min-instances=0
       - --max-instances=10
       - --memory=512Mi
+      - --command=node
+      - --args=apps/api/dist/apps/api/src/index.js
+      - --set-env-vars=FIREBASE_STORAGE_BUCKET=fount-app-prod-fb.appspot.com
       - --set-secrets=OPENAI_API_KEY=openai-api-key:latest,ANTHROPIC_API_KEY=anthropic-api-key:latest,PINECONE_API_KEY=pinecone-api-key:latest
 
 substitutions:
