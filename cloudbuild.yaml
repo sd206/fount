@@ -4,7 +4,7 @@ steps:
     args:
       - build
       - -t
-      - '$_REGION-docker.pkg.dev/$PROJECT_ID/fount/api:$COMMIT_SHA'
+      - '$_REGION-docker.pkg.dev/$PROJECT_ID/fount/api:latest'
       - -f
       - apps/api/Dockerfile
       - .
@@ -13,7 +13,7 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - push
-      - '$_REGION-docker.pkg.dev/$PROJECT_ID/fount/api:$COMMIT_SHA'
+      - '$_REGION-docker.pkg.dev/$PROJECT_ID/fount/api:latest'
 
   # 3. Deploy to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -22,7 +22,7 @@ steps:
       - run
       - deploy
       - fount-api
-      - --image=$_REGION-docker.pkg.dev/$PROJECT_ID/fount/api:$COMMIT_SHA
+      - --image=$_REGION-docker.pkg.dev/$PROJECT_ID/fount/api:latest
       - --region=$_REGION
       - --platform=managed
       - --allow-unauthenticated
