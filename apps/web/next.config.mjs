@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
+  trailingSlash: true,
   transpilePackages: ['@fount/shared'],
   images: {
     unoptimized: true, // required for static export
