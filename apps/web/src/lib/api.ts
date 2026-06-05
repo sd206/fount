@@ -10,11 +10,7 @@ import type {
   UpdateFlowInput, GenerateType, OcrScanResult, CalendarEvent,
 } from '@fount/shared/types';
 
-// In production, requests go through Firebase Hosting rewrite (/api/v1 → Cloud Run)
-// so there's no CORS issue. In dev, point directly to local API.
-const BASE = process.env.NODE_ENV === 'production'
-  ? '/api/v1'
-  : (process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080/v1');
+const BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080/v1';
 
 async function getToken(): Promise<string> {
   const user = auth.currentUser;

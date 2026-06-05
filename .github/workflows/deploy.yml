@@ -55,4 +55,4 @@ jobs:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
 
       - name: Deploy to Firebase Hosting
-        run: firebase deploy --only hosting --token "${{ secrets.FIREBASE_TOKEN }}" --project fount-app-prod-fb
+        run: firebase deploy --only hosting --token "${{ secrets.FIREBASE_TOKEN }}" --project fount-app-prod
