@@ -34,6 +34,26 @@ steps:
       - --set-env-vars=FIREBASE_STORAGE_BUCKET=fount-app-prod-fb.appspot.com
       - --set-secrets=OPENAI_API_KEY=openai-api-key:latest,ANTHROPIC_API_KEY=anthropic-api-key:latest,PINECONE_API_KEY=pinecone-api-key:latest
 
+  # 4. Deploy jobs server to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - fount-jobs
+      - --image=$_REGION-docker.pkg.dev/$PROJECT_ID/fount/api:latest
+      - --region=$_REGION
+      - --platform=managed
+      - --no-allow-unauthenticated
+      - --min-instances=0
+      - --max-instances=5
+      - --memory=1Gi
+      - --timeout=300s
+      - --command=node
+      - --args=dist/jobsServer.js
+      - --set-env-vars=FIREBASE_STORAGE_BUCKET=fount-app-prod-fb.appspot.com
+      - --set-secrets=OPENAI_API_KEY=openai-api-key:latest,ANTHROPIC_API_KEY=anthropic-api-key:latest,PINECONE_API_KEY=pinecone-api-key:latest
+
 substitutions:
   _REGION: us-central1
 
