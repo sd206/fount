@@ -16,8 +16,8 @@
     ],
     "rewrites": [
       {
-        "source": "**",
-        "destination": "/index.html"
+        "source": "/drops/new",
+        "destination": "/drops/new.html"
       }
     ]
   }
