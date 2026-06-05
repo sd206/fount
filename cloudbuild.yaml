@@ -4,7 +4,7 @@ steps:
     args:
       - build
       - -t
-      - '$_REGION-docker.pkg.dev/$PROJECT_ID/fount/api:latest'
+      - 'us-central1-docker.pkg.dev/fount-app-prod-fb/fount/api:latest'
       - -f
       - apps/api/Dockerfile
       - .
@@ -13,16 +13,16 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - push
-      - '$_REGION-docker.pkg.dev/$PROJECT_ID/fount/api:latest'
+      - 'us-central1-docker.pkg.dev/fount-app-prod-fb/fount/api:latest'
 
-  # 3. Deploy to Cloud Run
+  # 3. Deploy to Cloud Run (same project as Firebase Hosting)
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
       - run
       - deploy
       - fount-api
-      - --image=$_REGION-docker.pkg.dev/$PROJECT_ID/fount/api:latest
+      - --image=us-central1-docker.pkg.dev/fount-app-prod-fb/fount/api:latest
       - --region=$_REGION
       - --platform=managed
       - --no-allow-unauthenticated
@@ -31,6 +31,7 @@ steps:
       - --memory=512Mi
       - --command=node
       - --args=dist/index.js
+      - --project=fount-app-prod-fb
       - --set-env-vars=FIREBASE_PROJECT_ID=fount-app-prod-fb,FIREBASE_STORAGE_BUCKET=fount-app-prod-fb.appspot.com
       - --set-secrets=OPENAI_API_KEY=openai-api-key:latest,ANTHROPIC_API_KEY=anthropic-api-key:latest,PINECONE_API_KEY=pinecone-api-key:latest
 
@@ -41,7 +42,7 @@ steps:
       - run
       - deploy
       - fount-jobs
-      - --image=$_REGION-docker.pkg.dev/$PROJECT_ID/fount/api:latest
+      - --image=us-central1-docker.pkg.dev/fount-app-prod-fb/fount/api:latest
       - --region=$_REGION
       - --platform=managed
       - --no-allow-unauthenticated
@@ -51,7 +52,8 @@ steps:
       - --timeout=300s
       - --command=node
       - --args=dist/jobsServer.js
-      - --set-env-vars=FIREBASE_STORAGE_BUCKET=fount-app-prod-fb.appspot.com
+      - --project=fount-app-prod-fb
+      - --set-env-vars=FIREBASE_PROJECT_ID=fount-app-prod-fb,FIREBASE_STORAGE_BUCKET=fount-app-prod-fb.appspot.com
       - --set-secrets=OPENAI_API_KEY=openai-api-key:latest,ANTHROPIC_API_KEY=anthropic-api-key:latest,PINECONE_API_KEY=pinecone-api-key:latest
 
 substitutions:

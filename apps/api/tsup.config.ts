@@ -4,6 +4,7 @@ export default defineConfig({
   entry: {
     index: 'src/index.ts',
     jobsServer: 'src/jobsServer.ts',
+    function: 'src/function.ts',
   },
   format: ['cjs'],
   target: 'node20',

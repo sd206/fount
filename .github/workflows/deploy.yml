@@ -54,5 +54,8 @@ jobs:
           NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}
           # No NEXT_PUBLIC_API_URL — production uses /api/v1 proxy via Firebase Hosting
 
-      - name: Deploy to Firebase Hosting
-        run: firebase deploy --only hosting --token "${{ secrets.FIREBASE_TOKEN }}" --project fount-app-prod
+      - name: Build API for Functions
+        run: yarn workspace @fount/api build
+
+      - name: Deploy to Firebase
+        run: firebase deploy --only hosting,functions --token "${{ secrets.FIREBASE_TOKEN }}" --project fount-app-prod-fb

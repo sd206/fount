@@ -1,4 +1,8 @@
 {
+  "functions": {
+    "source": "apps/api",
+    "runtime": "nodejs20"
+  },
   "firestore": {
     "database": "(default)",
     "location": "us-central1",
@@ -6,7 +10,7 @@
     "indexes": "firestore.indexes.json"
   },
   "hosting": {
-    "site": "fount-app-prod",
+    "site": "fount-app-prod-fb",
     "public": "apps/web/out",
     "cleanUrls": true,
     "trailingSlash": false,
@@ -18,10 +22,8 @@
     "rewrites": [
       {
         "source": "/api/v1/**",
-        "run": {
-          "serviceId": "fount-api",
-          "region": "us-central1"
-        }
+        "function": "api",
+        "region": "us-central1"
       }
     ]
   }

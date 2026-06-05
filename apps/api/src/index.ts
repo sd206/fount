@@ -59,7 +59,10 @@ app.use('/v1/tasks', tasksRouter);
 // ─── Error handler ────────────────────────────────────────────────────────────
 app.use(errorHandler);
 
-const PORT = process.env.PORT ?? 8080;
-app.listen(PORT, () => console.log(`Fount API running on :${PORT}`));
+// Only start the HTTP server when running directly (not as a Firebase Function)
+if (process.env.FUNCTION_TARGET === undefined) {
+  const PORT = process.env.PORT ?? 8080;
+  app.listen(PORT, () => console.log(`Fount API running on :${PORT}`));
+}
 
 export default app;
