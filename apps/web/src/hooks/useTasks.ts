@@ -1,11 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../lib/api';
+import { useAuthStore } from '../store/auth';
 import type { Task } from '@fount/shared/types';
 
 export function useTasks() {
+  const { user } = useAuthStore();
   return useQuery({
     queryKey: ['tasks'],
     queryFn: () => api.tasks.list(),
+    enabled: !!user,
   });
 }
 

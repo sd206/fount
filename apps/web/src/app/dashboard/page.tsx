@@ -3,12 +3,16 @@
 import { AppShell } from '../../components/layout/AppShell';
 import { useCommentary, useDismissCommentary } from '../../hooks/useCommentary';
 import { useTasks } from '../../hooks/useTasks';
+import { useAuthStore } from '../../store/auth';
 import type { AiCommentary, Task } from '@fount/shared/types';
 
 export default function DashboardPage() {
+  const { user, loading } = useAuthStore();
   const { data: commentaryData } = useCommentary();
   const { data: tasksData } = useTasks();
   const dismiss = useDismissCommentary();
+
+  if (loading || !user) return null;
 
   const cards = commentaryData?.cards ?? [];
   const todayTasks = (tasksData?.tasks ?? []).filter(isTodayTask);

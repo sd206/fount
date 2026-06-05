@@ -1,11 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../lib/api';
+import { useAuthStore } from '../store/auth';
 
 export function useCommentary() {
+  const { user } = useAuthStore();
   return useQuery({
     queryKey: ['commentary'],
     queryFn: () => api.ai.getCommentary(),
-    refetchInterval: 5 * 60 * 1000, // refresh every 5 min
+    enabled: !!user,
+    refetchInterval: 5 * 60 * 1000,
   });
 }
 
