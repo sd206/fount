@@ -31,7 +31,7 @@ steps:
       - --memory=512Mi
       - --command=node
       - --args=dist/index.js
-      - --set-env-vars=FIREBASE_STORAGE_BUCKET=fount-app-prod-fb.appspot.com
+      - --set-env-vars=FIREBASE_PROJECT_ID=fount-app-prod-fb,FIREBASE_STORAGE_BUCKET=fount-app-prod-fb.appspot.com
       - --set-secrets=OPENAI_API_KEY=openai-api-key:latest,ANTHROPIC_API_KEY=anthropic-api-key:latest,PINECONE_API_KEY=pinecone-api-key:latest
 
   # 4. Deploy jobs server to Cloud Run
