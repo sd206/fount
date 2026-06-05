@@ -17,7 +17,22 @@ const app = express();
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
 app.use(helmet());
-app.use(cors({ origin: process.env.CORS_ORIGIN ?? '*' }));
+const allowedOrigins = [
+  'https://fount-app-prod-fb.web.app',
+  'https://fount-app-prod-fb.firebaseapp.com',
+  'http://localhost:3000',
+  ...(process.env.CORS_ORIGIN ? [process.env.CORS_ORIGIN] : []),
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile, curl, etc.)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    callback(new Error(`CORS: origin ${origin} not allowed`));
+  },
+  credentials: true,
+}));
 app.use(morgan('combined'));
 app.use(express.json({ limit: '10mb' }));
 
