@@ -16,8 +16,11 @@
     ],
     "rewrites": [
       {
-        "source": "/drops/new",
-        "destination": "/drops/new.html"
+        "source": "/api/v1/**",
+        "run": {
+          "serviceId": "fount-api",
+          "region": "us-central1"
+        }
       }
     ]
   }

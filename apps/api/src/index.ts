@@ -39,6 +39,14 @@ app.use(express.json({ limit: '10mb' }));
 // ─── Health ───────────────────────────────────────────────────────────────────
 app.get('/health', (_req, res) => res.json({ status: 'ok' }));
 
+// ─── CORS preflight — must be before auth middleware ─────────────────────────
+app.options('*', cors({
+  origin: allowedOrigins,
+  credentials: true,
+  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
 // ─── Routes (all require auth) ────────────────────────────────────────────────
 app.use('/v1', authenticate);
 app.use('/v1/drops', dropsRouter);
