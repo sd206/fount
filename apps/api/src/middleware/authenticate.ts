@@ -25,7 +25,8 @@ export async function authenticate(
     const decoded = await getAuth().verifyIdToken(token);
     req.uid = decoded.uid;
     next();
-  } catch {
-    next(new AppError(401, 'Invalid or expired token'));
+  } catch (err) {
+    console.error('Auth failed:', (err as Error).message);
+    next(new AppError(401, `Invalid or expired token: ${(err as Error).message}`));
   }
 }
