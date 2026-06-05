@@ -15,7 +15,13 @@ import type {
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? '/api/v1';
 
 async function getToken(): Promise<string> {
-  const user = auth.currentUser;
+  // Wait for Firebase Auth to restore session from persistence
+  const user = await new Promise<import('firebase/auth').User | null>((resolve) => {
+    const unsubscribe = auth.onAuthStateChanged((u) => {
+      unsubscribe();
+      resolve(u);
+    });
+  });
   if (!user) throw new Error('Not authenticated');
   return user.getIdToken();
 }
