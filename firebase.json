@@ -19,6 +19,12 @@
       "**/.*",
       "**/node_modules/**"
     ],
+    "headers": [
+      {
+        "source": "**/*.txt",
+        "headers": [{ "key": "Content-Type", "value": "text/plain" }]
+      }
+    ],
     "rewrites": [
       {
         "source": "/api/v1/**",
