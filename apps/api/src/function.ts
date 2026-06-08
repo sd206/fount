@@ -12,6 +12,7 @@ export const api = onRequest(
     memory: '512MiB',
     timeoutSeconds: 60,
     maxInstances: 10,
+    secrets: ['OPENAI_API_KEY', 'ANTHROPIC_API_KEY', 'PINECONE_API_KEY'],
   },
   app,
 );

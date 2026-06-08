@@ -9,8 +9,18 @@ import { AI_TASKS } from '@fount/shared/constants';
 
 type AiTask = typeof AI_TASKS[keyof typeof AI_TASKS];
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+let _openai: OpenAI | null = null;
+let _anthropic: Anthropic | null = null;
+
+function getOpenAI(): OpenAI {
+  if (!_openai) _openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  return _openai;
+}
+
+function getAnthropic(): Anthropic {
+  if (!_anthropic) _anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  return _anthropic;
+}
 
 // Map task types to preferred providers
 const PROVIDER_MAP: Record<AiTask, 'openai' | 'claude' | 'gemini'> = {
@@ -33,7 +43,7 @@ export async function callAi({ task, systemPrompt, userPrompt, maxTokens = 1024 
   const provider = PROVIDER_MAP[task];
 
   if (provider === 'claude') {
-    const msg = await anthropic.messages.create({
+    const msg = await getAnthropic().messages.create({
       model: 'claude-opus-4-6',
       max_tokens: maxTokens,
       system: systemPrompt,
@@ -44,7 +54,7 @@ export async function callAi({ task, systemPrompt, userPrompt, maxTokens = 1024 
   }
 
   if (provider === 'openai') {
-    const res = await openai.chat.completions.create({
+    const res = await getOpenAI().chat.completions.create({
       model: 'gpt-4o-mini',
       max_tokens: maxTokens,
       messages: [
@@ -60,7 +70,7 @@ export async function callAi({ task, systemPrompt, userPrompt, maxTokens = 1024 
 }
 
 export async function createEmbedding(text: string): Promise<number[]> {
-  const res = await openai.embeddings.create({
+  const res = await getOpenAI().embeddings.create({
     model: 'text-embedding-3-small',
     input: text,
   });
