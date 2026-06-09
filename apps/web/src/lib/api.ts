@@ -10,9 +10,12 @@ import type {
   UpdateFlowInput, GenerateType, OcrScanResult, CalendarEvent,
 } from '@fount/shared/types';
 
-// Production: use Firebase Hosting proxy (/api/v1 → Cloud Run, same origin = no CORS)
-// Development: use local API directly
-const BASE = process.env.NEXT_PUBLIC_API_URL ?? '/api/v1';
+// Production: Firebase Hosting rewrites /api/v1/** → Firebase Function (same origin, no CORS)
+// Development: hit local API directly
+const BASE =
+  process.env.NODE_ENV === 'production'
+    ? '/api/v1'
+    : (process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080/v1');
 
 async function getToken(): Promise<string> {
   // Wait for Firebase Auth to restore session from persistence
