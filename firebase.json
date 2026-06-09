@@ -1,8 +1,4 @@
 {
-  "functions": {
-    "source": "apps/api",
-    "runtime": "nodejs20"
-  },
   "firestore": {
     "database": "(default)",
     "location": "us-central1",
