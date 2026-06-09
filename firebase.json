@@ -26,7 +26,7 @@
         "source": "/v1/**",
         "run": {
           "serviceId": "fount-api",
-          "region": "uc"
+          "region": "us-central1"
         }
       }
     ]
