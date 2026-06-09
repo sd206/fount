@@ -28,6 +28,9 @@ jobs:
       - name: Debug api.ts
         run: grep -n "BASE\|API_URL" apps/web/src/lib/api.ts
 
+      - name: Clean Next.js cache
+        run: rm -rf apps/web/.next apps/web/out
+
       - name: Build web
         run: yarn workspace @fount/web build
         env:
@@ -38,6 +41,9 @@ jobs:
           NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }}
           NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}
           # No NEXT_PUBLIC_API_URL — production uses /api/v1 proxy via Firebase Hosting
+
+      - name: Debug out/ content
+        run: grep -r "xpdnxjudvq\|api/v1" apps/web/out --include="*.js" -l 2>/dev/null || echo "No matches found"
 
       - name: Build API for Functions
         run: yarn workspace @fount/api build
