@@ -53,7 +53,7 @@ jobs:
         run: yarn workspace @fount/api build
 
       - name: Deploy Firebase Functions
-        run: firebase deploy --only functions --token "${{ secrets.FIREBASE_TOKEN }}" --project fount-app-prod-fb
+        run: firebase deploy --only functions --force --token "${{ secrets.FIREBASE_TOKEN }}" --project fount-app-prod-fb
 
       - name: Deploy Firebase Hosting
         run: firebase deploy --only hosting --token "${{ secrets.FIREBASE_TOKEN }}" --project fount-app-prod-fb
