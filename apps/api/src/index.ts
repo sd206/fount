@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
@@ -15,40 +15,38 @@ import { errorHandler } from './middleware/errorHandler';
 
 const app = express();
 
-// ─── Middleware ───────────────────────────────────────────────────────────────
-app.use(helmet());
-const allowedOrigins = [
-  'https://fount-app-prod-fb.web.app',
-  'https://fount-app-prod-fb.firebaseapp.com',
-  'http://localhost:3000',
-  ...(process.env.CORS_ORIGIN ? [process.env.CORS_ORIGIN] : []),
-];
-
-app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests with no origin (mobile, curl, etc.)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) return callback(null, true);
-    callback(new Error(`CORS: origin ${origin} not allowed`));
-  },
+// ─── CORS — must be first, before auth and routes ────────────────────────────
+const corsOptions: cors.CorsOptions = {
+  origin: [
+    'https://fount-app-prod-fb.web.app',
+    'https://fount-app-prod-fb.firebaseapp.com',
+    'http://localhost:3000',
+  ],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   credentials: true,
-}));
+};
+
+app.use(cors(corsOptions));
+
+// Explicitly handle preflight OPTIONS requests before any other middleware
+app.options('*', cors(corsOptions));
+
+// ─── General middleware ───────────────────────────────────────────────────────
+app.use(helmet());
 app.use(morgan('combined'));
 app.use(express.json({ limit: '10mb' }));
 
 // ─── Health ───────────────────────────────────────────────────────────────────
-app.get('/health', (_req, res) => res.json({ status: 'ok' }));
+app.get('/health', (_req: Request, res: Response) => res.json({ status: 'ok' }));
 
-// ─── CORS preflight — must be before auth middleware ─────────────────────────
-app.options('*', cors({
-  origin: allowedOrigins,
-  credentials: true,
-  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-}));
+// ─── Auth middleware — skip OPTIONS preflight ─────────────────────────────────
+app.use('/v1', (req: Request, res: Response, next: NextFunction) => {
+  if (req.method === 'OPTIONS') return next();
+  return authenticate(req, res, next);
+});
 
-// ─── Routes (all require auth) ────────────────────────────────────────────────
-app.use('/v1', authenticate);
+// ─── Routes ───────────────────────────────────────────────────────────────────
 app.use('/v1/drops', dropsRouter);
 app.use('/v1/flows', flowsRouter);
 app.use('/v1/search', searchRouter);
