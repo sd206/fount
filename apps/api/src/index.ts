@@ -57,8 +57,9 @@ app.use('/v1/tasks', tasksRouter);
 // ─── Error handler ────────────────────────────────────────────────────────────
 app.use(errorHandler);
 
-// Only start the HTTP server when running directly (not as a Firebase Function)
-if (process.env.FUNCTION_TARGET === undefined) {
+// Only start the HTTP server when run directly (node dist/index.js).
+// When imported by function.ts, require.main !== module so this is skipped.
+if (require.main === module) {
   const PORT = process.env.PORT ?? 8080;
   app.listen(PORT, () => console.log(`Fount API running on :${PORT}`));
 }
