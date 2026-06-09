@@ -43,7 +43,11 @@ jobs:
           # No NEXT_PUBLIC_API_URL — production uses /api/v1 proxy via Firebase Hosting
 
       - name: Debug out/ content
-        run: grep -r "xpdnxjudvq\|api/v1" apps/web/out --include="*.js" -l 2>/dev/null || echo "No matches found"
+        run: |
+          echo "=== Files still containing Cloud Run URL ==="
+          grep -r "xpdnxjudvq" apps/web/out --include="*.js" -l 2>/dev/null || echo "NONE — Cloud Run URL is gone"
+          echo "=== Files containing /api/v1 ==="
+          grep -r "api/v1" apps/web/out --include="*.js" -l 2>/dev/null || echo "NONE"
 
       - name: Build API for Functions
         run: yarn workspace @fount/api build
