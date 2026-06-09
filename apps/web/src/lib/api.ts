@@ -10,10 +10,9 @@ import type {
   UpdateFlowInput, GenerateType, OcrScanResult, CalendarEvent,
 } from '@fount/shared/types';
 
-// Always use the Firebase Hosting proxy — no env var, no substitution possible.
-// For local dev, run: NEXT_PUBLIC_API_URL=http://localhost:8080/v1 next dev
-// (next.config.mjs overrides this for production builds anyway)
-const BASE = '/api/v1';
+// Production: Firebase Hosting rewrites /v1/** → Cloud Run fount-api (same origin, no CORS)
+// Development: set NEXT_PUBLIC_API_URL=http://localhost:8080/v1
+const BASE = process.env.NEXT_PUBLIC_API_URL ?? '/v1';
 
 async function getToken(): Promise<string> {
   // Wait for Firebase Auth to restore session from persistence
