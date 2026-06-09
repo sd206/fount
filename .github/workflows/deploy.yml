@@ -25,6 +25,9 @@ jobs:
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
 
+      - name: Debug api.ts
+        run: grep -n "BASE\|API_URL" apps/web/src/lib/api.ts
+
       - name: Build web
         run: yarn workspace @fount/web build
         env:
